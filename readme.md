@@ -11,42 +11,44 @@ Dependencies are loaded within the script:
 
 ## Quick Start
 
-### 1. Configure S3 bucket URL
-
-Edit the `getRoot()` function in `audio.js`:
-
-```javascript
-function getRoot() {
-  // Configure your base S3 URL here
-  const base = "https://your-bucket.s3.amazonaws.com/audio/";
-  const id = typeof dodID !== "undefined" ? dodID : window.dodID || "";
-  return `${base}${id || ""}`;
-}
-```
-
-### 2. Include the files
+### 1. Include the files
 
 ```html
 <link rel="stylesheet" href="path/to/audio.css" />
 <script src="path/to/audio.js"></script>
 ```
 
-### 3. Add the container element
+### 2. Add the container element
 
 ```html
 <div id="audio-player-container"></div>
 ```
 
-### 4. Set the DOD ID
+### 3. Initialize the player
 
 ```javascript
-window.dodID = "123456789";
+initPlayer({
+  baseUrl: "https://your-bucket.s3.amazonaws.com/audio/",
+  dodId: "123456789",
+});
 ```
 
-### 5. Initialize the player
+**Configuration options:**
+
+- `baseUrl` (optional) - Your S3 bucket base URL. Defaults to `https://your-bucket.s3.amazonaws.com/audio/`
+- `dodId` (optional) - DOD identifier for the recording. Falls back to `window.dodID` if not provided
+
+**Alternative usage:**
 
 ```javascript
+// Set dodID globally
+window.dodID = "123456789";
 initPlayer();
+
+// Or just override baseUrl
+initPlayer({
+  baseUrl: "https://my-custom-bucket.s3.amazonaws.com/recordings/",
+});
 ```
 
 ## Asset Structure
@@ -117,7 +119,10 @@ The player expects a `metadata.json` file with the following structure:
     "30": {
       "files": ["267215424.30.jpg", "267215427.30.jpg"],
       "partrefs": ["cover", "disc"],
-      "titles": ["The Music & Songs of Greentrax", "The Music & Songs of Greentrax"],
+      "titles": [
+        "The Music & Songs of Greentrax",
+        "The Music & Songs of Greentrax"
+      ],
       "width": 1000
     },
     "23": {
@@ -165,4 +170,12 @@ Key CSS classes:
 
 ### Access Restrictions
 
-The player displays a custom message when content is restricted. Edit the `showAccessRestrictionMessage()` function to customize this behavior.
+The player displays a custom message when content is restricted. Edit the `showAccessRestrictionMessage()` function in `audio.js` to customize this behavior.
+
+### Cleanup
+
+To stop audio playback and free resources (e.g., on page navigation or modal close), call:
+
+```javascript
+cleanupPlayer();
+```

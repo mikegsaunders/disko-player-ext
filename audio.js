@@ -34,16 +34,12 @@ const SVG_ICONS = {
   volume_up: `<svg viewBox="0 0 24 24" width="24" height="24"><path fill="white" d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>`,
   headphones: `<svg viewBox="0 0 24 24" width="120" height="120" fill="currentColor"><path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/></svg>`,
 };
+
+let baseUrl = "https://your-bucket.s3.amazonaws.com/audio/";
+let dodId = "";
+
 function getRoot() {
-  // Configure base S3 URL here
-  const base = "https://your-bucket.s3.amazonaws.com/audio/";
-  const id =
-    typeof dodID !== "undefined"
-      ? dodID
-      : typeof window !== "undefined"
-      ? window.dodID
-      : "";
-  return `${base}${id || ""}`;
+  return `${baseUrl}${dodId || ""}`;
 }
 
 let albumJson = null;
@@ -751,8 +747,18 @@ function cleanupPlayer() {
   console.log("Audio player cleaned up");
 }
 
-async function initPlayer() {
+async function initPlayer(config = {}) {
   try {
+    if (config.baseUrl) {
+      baseUrl = config.baseUrl;
+    }
+    
+    if (config.dodId !== undefined) {
+      dodId = config.dodId;
+    } else if (typeof window !== "undefined" && window.dodID) {
+      dodId = window.dodID;
+    }
+
     await ensureHowlerLoaded();
 
     await loadMetadataJson();
