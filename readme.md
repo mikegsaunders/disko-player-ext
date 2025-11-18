@@ -13,10 +13,21 @@ Dependencies are loaded within the script:
 
 ### 1. Include the files
 
+**Option A: Local files**
+
 ```html
 <link rel="stylesheet" href="path/to/audio.css" />
 <script src="path/to/audio.js"></script>
 ```
+
+**Option B: CDN (jsDelivr)**
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/nls-lst/disko-player-ext@main/audio.css" />
+<script src="https://cdn.jsdelivr.net/gh/nls-lst/disko-player-ext@main/audio.js"></script>
+```
+
+> **Note:** For production, use a specific version tag instead of `@main` (e.g., `@v1.0.0`) to ensure stability.
 
 ### 2. Add the container element
 
